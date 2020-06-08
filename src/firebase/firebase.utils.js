@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 
-const config =  {
+const config = {
   apiKey: "AIzaSyAKQZLxaXCTt1JPpZr60nhFyXZLigwE6CI",
   authDomain: "crwn-db-c6127.firebaseapp.com",
   databaseURL: "https://crwn-db-c6127.firebaseio.com",
@@ -11,6 +11,35 @@ const config =  {
   storageBucket: "crwn-db-c6127.appspot.com",
   messagingSenderId: "927947393476",
   appId: "1:927947393476:web:6db59065d9e13892c3bc91"
+};
+
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  // firestore returns two different types: reference or snapshot
+  // firestore return alway these objects even if there is no data
+  // every CRUD operation works only with references, not with snapshots
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log('error creating user', error.message);
+    }
+  }
+
+  return userRef;
 };
 
 firebase.initializeApp(config);
