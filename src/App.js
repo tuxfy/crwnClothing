@@ -52,20 +52,20 @@ class App extends React.Component {
               ) : (
                   <SignInAndSignOut />
                 )
-              } 
-            />
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({user}) => ({
-            currentUser: user.currentUser
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
 })
 
 const mapDispatchToProps = dispatch => ({
-            setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
